@@ -36,7 +36,7 @@ export const Test3Screen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.B3B3B3,
+    backgroundColor: Colors.FFFFFF,
     justifyContent: 'center',
     alignItems: 'center',
   },

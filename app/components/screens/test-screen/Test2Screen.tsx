@@ -1,5 +1,5 @@
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {SafeAreaView, StyleSheet, Text, View, Pressable} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {Colors} from '../../../utils/colors';
 import {Fonts} from '../../../utils/fonts';
 import {Texts} from '../../../utils/texts';
@@ -9,29 +9,50 @@ import {useInjection} from 'inversify-react';
 import {Types} from '../../../ioc/types';
 import {InitializationStorage} from '../../../mobx/storage/initialization-storage';
 
-export const Test2Screen = () => {
+import {Button} from '@rneui/themed';
+import {ApiService} from '../../../service/api/api';
+import {observer} from 'mobx-react';
+import {ButtonIcon} from '../../common/button/ButtonIcon';
+
+export const Test2Screen = observer(() => {
   const navigation = useNavigation();
+  const [people, setPeople] = useState(null);
+
   const initService: InitializationService = useInjection(
     Types.InitializationService,
   );
   const initStorage: InitializationStorage = useInjection(
     Types.InitializationStorage,
   );
+  const apiService: ApiService = useInjection(Types.ApiService);
 
-  const click = () => {
-    initStorage.setInitializationSuccessful(null);
-    navigation.goBack();
-    initService.initialize();
+  const getDate = () => {
+    apiService
+      .getPeople()
+      .then(response => {
+        initStorage.setInitializationSuccessful(true);
+        setPeople(response.data);
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
   };
+
+  // useEffect(() => {
+  //   getDate();
+  // }, []);
+
+  console.log('peopsl---', initStorage.getInitializationSuccessful());
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.mainWrapper}>
         <Text style={styles.bigText}>{'Test2Screen'}</Text>
+        <ButtonIcon text={'Test2Screen'} onPress={getDate} />
       </View>
     </SafeAreaView>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

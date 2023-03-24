@@ -37,6 +37,9 @@ export const TabBarContainer = observer((props: TabBarContainerProps) => {
           />
           <Button
             title={routeName}
+            onPress={() =>
+              navigation.navigate(NavigatorConstants.TEST2_SCREEN as never)
+            }
             containerStyle={{
               width: 50,
               marginHorizontal: 40,
@@ -44,6 +47,9 @@ export const TabBarContainer = observer((props: TabBarContainerProps) => {
           />
           <Button
             title={routeName}
+            onPress={() =>
+              navigation.navigate(NavigatorConstants.TEST3_SCREEN as never)
+            }
             containerStyle={{
               width: 50,
             }}
@@ -57,13 +63,36 @@ export const TabBarContainer = observer((props: TabBarContainerProps) => {
         <>
           <Button
             title={routeName}
+            onPress={() =>
+              navigation.navigate(NavigatorConstants.TEST1_SCREEN as never)
+            }
             containerStyle={{
               width: 50,
               marginHorizontal: 50,
             }}
           />
+        </>
+      );
+    }
+
+    if (routeName === NavigatorConstants.TEST1_SCREEN) {
+      return (
+        <>
           <Button
             title={routeName}
+            onPress={() =>
+              navigation.navigate(NavigatorConstants.TEST1_SCREEN as never)
+            }
+            containerStyle={{
+              width: 50,
+              marginHorizontal: 20,
+            }}
+          />
+          <Button
+            title={routeName}
+            onPress={() =>
+              navigation.navigate(NavigatorConstants.TEST2_SCREEN as never)
+            }
             containerStyle={{
               width: 50,
             }}
@@ -105,12 +134,12 @@ const styles = StyleSheet.create({
     },
     elevation: 10,
     shadowRadius: 13,
-    shadowColor: 'rgb(0, 114, 206)',
+    shadowColor: 'rgb(45, 47, 49)',
     shadowOpacity: 0.24,
     flexDirection: 'row',
     paddingVertical: 4,
     borderRadius: 70,
-    backgroundColor: Colors.B3B3B3,
+    backgroundColor: Colors.FFFFFF,
     opacity: 1,
     zIndex: 1,
     justifyContent: 'center',
