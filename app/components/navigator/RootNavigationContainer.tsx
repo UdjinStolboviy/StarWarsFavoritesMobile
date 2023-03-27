@@ -10,9 +10,7 @@ import {RootStackParamList} from './types';
 import {InitialNavigator} from './InitialNavigator';
 import {ErrorNavigator} from './ErrorNavigator';
 import {BottomTabNavigator} from './bottom-tab-navigator/BottomTabNavigator';
-import {Test1Screen} from '../screens/test-screen/Test1Screen';
-import {Test2Screen} from '../screens/test-screen/Test2Screen';
-import {Test3Screen} from '../screens/test-screen/Test3Screen';
+import {PeopleScreen} from '../screens/peopleScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -45,30 +43,11 @@ export const RootNavigationContainer = (
           options={{headerShown: false, gestureEnabled: false}}
           component={BottomTabNavigator}
         />
-        {/* <Stack.Screen
-          component={Test1Screen}
-          options={{
-            headerShown: false,
-            cardStyle: {backgroundColor: 'rgba(1, 1, 1, 0.2)'},
-          }}
-          name={NavigatorConstants.TEST1_SCREEN}
-        />
         <Stack.Screen
-          component={Test2Screen}
-          options={{
-            headerShown: false,
-            cardStyle: {backgroundColor: 'rgba(1, 1, 1, 0.2)'},
-          }}
-          name={NavigatorConstants.TEST2_SCREEN}
+          name={NavigatorConstants.PEOPLE_SCREEN}
+          options={{headerShown: false, gestureEnabled: false}}
+          component={PeopleScreen}
         />
-        <Stack.Screen
-          component={Test3Screen}
-          options={{
-            headerShown: false,
-            cardStyle: {backgroundColor: 'rgba(1, 1, 1, 0.2)'},
-          }}
-          name={NavigatorConstants.TEST3_SCREEN}
-        /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

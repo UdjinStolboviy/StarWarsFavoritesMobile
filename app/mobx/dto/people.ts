@@ -1,3 +1,4 @@
+import { action, makeObservable, observable } from "mobx";
 import { PeopleRow } from "./people-row";
 
 
@@ -20,10 +21,11 @@ export class People {
     private readonly created: string;
     private readonly edited: string;
     private readonly url: string;
-    private favorite: boolean = false;
+    @observable private favorite: boolean = false;
 
 
     constructor(row: PeopleRow) {
+        makeObservable(this);
         this.name = row.name;
         this.height = row.height;
         this.mass = row.mass;
@@ -113,6 +115,7 @@ export class People {
         return this.favorite;
     }
 
+    @action
     public setFavorite(value: boolean) {
         this.favorite = value;
     }

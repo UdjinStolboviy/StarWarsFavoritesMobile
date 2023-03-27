@@ -5,6 +5,8 @@ import {
   View,
   Pressable,
   FlatList,
+  StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Colors} from '../../../utils/colors';
@@ -19,87 +21,95 @@ import {InitializationStorage} from '../../../mobx/storage/initialization-storag
 import {Button, Card, Icon} from '@rneui/themed';
 import {ApiService} from '../../../service/api/api';
 import {observer} from 'mobx-react';
-import {ButtonIcon} from '../../common/button/ButtonIcon';
+import {ButtonText} from '../../common/button/ButtonText';
 import {InputView} from '../../common/input/InputView';
 
 import {NavigatorConstants} from '../../../utils/navigator-constants';
+import {PeopleStorage} from '../../../mobx/storage/sw-people-store';
+import {ButtonLike} from '../../common/button/ButtonLike';
+import {People} from '../../../mobx/dto/people';
+import {PeopleCardView} from '../../common/PeopleCardView';
+import {FansView} from '../../common/FansView';
 
 export const Test2Screen = observer(() => {
-  const navigation = useNavigation();
-  const [people, setPeople] = useState(null);
   const [inputValues, setInputValues] = useState('');
+  const [
+    onEndReachedCalledDuringMomentum,
+    setOnEndReachedCalledDuringMomentum,
+  ] = useState(false);
 
-  const initService: InitializationService = useInjection(
-    Types.InitializationService,
-  );
-  const initStorage: InitializationStorage = useInjection(
-    Types.InitializationStorage,
-  );
-  const apiService: ApiService = useInjection(Types.ApiService);
+  const peopleStorege: PeopleStorage = useInjection(Types.PeopleStorage);
 
   const getDate = () => {
-    apiService
-      .getPeople()
-      .then(response => {
-        initStorage.setInitializationSuccessful(true);
-        setPeople(response.data.results);
-      })
-      .catch(error => {
-        console.log('error', error);
-        navigation.navigate(NavigatorConstants.ERROR_SCREEN as never);
-      });
+    peopleStorege.getDataPeoples();
   };
 
-  // useEffect(() => {
-  //   getDate();
-  // }, []);
+  useEffect(() => {
+    if (inputValues) {
+      peopleStorege.getSearchedPeoples(inputValues);
+    }
+  }, [inputValues]);
 
-  console.log('peopsl---', people);
-  const renderCard = (item: any, index: number) => {
-    return (
-      <Card containerStyle={{borderRadius: 20}}>
-        <Card.Title>{item.name}</Card.Title>
-        <Card.Divider />
-        <Card.Image
-          style={{padding: 0}}
-          resizeMode="contain"
-          source={require('../../../../assets/img/sword.jpeg')}
-        />
-        <Text style={{margin: 20, width: 200}}>{`Gender: ${item.gender}`}</Text>
-        <Button
-          icon={
-            <Icon name="code" color="#ffffff" iconStyle={{marginRight: 10}} />
-          }
-          buttonStyle={{
-            borderRadius: 10,
-            marginLeft: 0,
-            marginRight: 0,
-            marginBottom: 0,
-          }}
-          title="VIEW NOW"
-        />
-      </Card>
-    );
+  useEffect(() => {
+    getDate();
+  }, []);
+
+  const renderCard = (item: People, index: number) => {
+    return <PeopleCardView people={item} key={item.getName()} />;
+  };
+
+  const paginationScreen = () => {
+    if (onEndReachedCalledDuringMomentum) {
+      return;
+    }
+    peopleStorege.getNextPagePeoples();
   };
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       <View style={styles.mainWrapper}>
         <InputView
           value={inputValues}
           containerStyle={{width: '100%'}}
+          placeholder={'Search'}
           onChange={values => setInputValues(values)}
         />
-        <Text style={styles.bigText}>{'Test2Screen'}</Text>
-        <ButtonIcon text={'Test2Screen'} onPress={getDate} />
-        <FlatList
-          disableVirtualization
-          data={people}
-          renderItem={({item, index}) => renderCard(item, index)}
-          showsVerticalScrollIndicator={false}
-          onEndReachedThreshold={1}
-          onEndReached={() => console.log('onEndReached')}
-        />
+        <View style={styles.wrapperFans}>
+          <FansView
+            textCanter={peopleStorege.getFemale()}
+            textCategory={'Female Fans'}
+          />
+          <FansView
+            textCanter={peopleStorege.getMale()}
+            textCategory={'Male Fans'}
+          />
+          <FansView
+            textCanter={peopleStorege.getOther()}
+            textCategory={'Others'}
+          />
+        </View>
+        {peopleStorege.getLoaded() ? (
+          <View style={styles.wrapperLoad}>
+            <ActivityIndicator />
+          </View>
+        ) : (
+          <FlatList
+            disableVirtualization
+            data={peopleStorege.getAllPeoples()}
+            renderItem={({item, index}) => renderCard(item, index)}
+            showsVerticalScrollIndicator={false}
+            onMomentumScrollBegin={() =>
+              setOnEndReachedCalledDuringMomentum(false)
+            }
+            onEndReachedThreshold={1}
+            onEndReached={paginationScreen}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
@@ -109,10 +119,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.FFFFFF,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   mainWrapper: {
+    marginTop: 30,
     paddingHorizontal: 20,
     width: '100%',
     justifyContent: 'center',
@@ -124,5 +133,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 24,
     color: Colors.B3B3B3,
+  },
+  wrapperLoad: {
+    height: '90%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  wrapperFans: {
+    flexDirection: 'row',
+    marginVertical: 10,
   },
 });

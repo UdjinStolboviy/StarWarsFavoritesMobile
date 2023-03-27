@@ -12,15 +12,7 @@ export const Test3Navigator = () => {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName={NavigatorConstants.TEST3_SCREEN}>
-      <Stack.Screen
-        component={Test3Screen}
-        name={NavigatorConstants.TEST3_SCREEN}
-      />
-      <Stack.Screen
-        component={Test1Screen}
-        name={NavigatorConstants.TEST1_SCREEN}
-      />
+      initialRouteName={NavigatorConstants.TEST2_SCREEN}>
       <Stack.Screen
         component={Test2Screen}
         name={NavigatorConstants.TEST2_SCREEN}

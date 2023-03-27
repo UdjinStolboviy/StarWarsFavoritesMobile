@@ -8,11 +8,11 @@ import {
 import {Colors} from '../../../utils/colors';
 import {Fonts} from '../../../utils/fonts';
 
-export interface ButtonIconProps extends TouchableOpacityProps {
+export interface ButtonTextProps extends TouchableOpacityProps {
   text: string;
 }
 
-export const ButtonIcon = (props: ButtonIconProps) => {
+export const ButtonText = (props: ButtonTextProps) => {
   return (
     <TouchableOpacity
       {...props}

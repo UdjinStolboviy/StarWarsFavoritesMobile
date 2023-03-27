@@ -11,6 +11,7 @@ import {NavigatorConstants} from '../../../utils/navigator-constants';
 
 import {Button} from '@rneui/themed';
 import {useNavigation} from '@react-navigation/native';
+import {PeopleStorage} from '../../../mobx/storage/sw-people-store';
 
 export interface TabBarContainerProps {
   children: React.ReactElement | React.ReactElement[];
@@ -19,95 +20,20 @@ export interface TabBarContainerProps {
 export const TabBarContainer = observer((props: TabBarContainerProps) => {
   const navigator: Navigator = useInjection(Types.Navigator);
   const navigation = useNavigation();
+  const peopleStorege: PeopleStorage = useInjection(Types.PeopleStorage);
 
   const routeName = navigator.getNavigator()?.getCurrentRoute()?.name;
-
-  const renderContent = () => {
-    if (routeName === NavigatorConstants.TEST2_SCREEN) {
-      return (
-        <>
-          <Button
-            title={routeName}
-            onPress={() =>
-              navigation.navigate(NavigatorConstants.TEST1_SCREEN as never)
-            }
-            containerStyle={{
-              width: 50,
-            }}
-          />
-          <Button
-            title={routeName}
-            onPress={() =>
-              navigation.navigate(NavigatorConstants.TEST2_SCREEN as never)
-            }
-            containerStyle={{
-              width: 50,
-              marginHorizontal: 40,
-            }}
-          />
-          <Button
-            title={routeName}
-            onPress={() =>
-              navigation.navigate(NavigatorConstants.TEST3_SCREEN as never)
-            }
-            containerStyle={{
-              width: 50,
-            }}
-          />
-        </>
-      );
-    }
-
-    if (routeName === NavigatorConstants.TEST3_SCREEN) {
-      return (
-        <>
-          <Button
-            title={routeName}
-            onPress={() =>
-              navigation.navigate(NavigatorConstants.TEST1_SCREEN as never)
-            }
-            containerStyle={{
-              width: 50,
-              marginHorizontal: 50,
-            }}
-          />
-        </>
-      );
-    }
-
-    if (routeName === NavigatorConstants.TEST1_SCREEN) {
-      return (
-        <>
-          <Button
-            title={routeName}
-            onPress={() =>
-              navigation.navigate(NavigatorConstants.TEST1_SCREEN as never)
-            }
-            containerStyle={{
-              width: 50,
-              marginHorizontal: 20,
-            }}
-          />
-          <Button
-            title={routeName}
-            onPress={() =>
-              navigation.navigate(NavigatorConstants.TEST2_SCREEN as never)
-            }
-            containerStyle={{
-              width: 50,
-            }}
-          />
-        </>
-      );
-    }
-
-    return props.children;
-  };
 
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.mainWrapper]}>
-        {renderContent()}
+        <Button
+          title={'CLEAR FANS'}
+          onPress={() => peopleStorege.clear()}
+          containerStyle={{
+            width: 200,
+          }}
+        />
       </Animated.View>
     </View>
   );
