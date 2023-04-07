@@ -18,7 +18,6 @@ export const PeopleCardView = observer(({people}: PeopleCardViewProps) => {
   const favorite = people.getFavorite();
   const navigation = useNavigation();
   const peopleStorege: PeopleStorage = useInjection(Types.PeopleStorage);
-  useEffect(() => {}, [people.getFavorite()]);
 
   const onPressLike = () => {
     people.setFavorite(!favorite);

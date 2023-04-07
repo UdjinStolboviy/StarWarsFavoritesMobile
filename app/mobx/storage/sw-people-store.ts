@@ -73,7 +73,7 @@ export class PeopleStorage {
     }
 
 
-
+    @action
     public getLoaded(): boolean {
         return this.load;
     }
@@ -83,6 +83,7 @@ export class PeopleStorage {
         this.load = value;
     }
 
+    @action
     public getLoadedPeoplesByPeopleName(name: string): People | undefined {
         return this.allPeoples.find(item => item.getName() === name);
     }
@@ -116,11 +117,12 @@ export class PeopleStorage {
         return this.favoritePeoples.find(item => item.getName() === people.getName()) !== undefined;
     }
 
-
+    @action
     public getAllPeoples(): People[] {
         return this.allPeoples;
     }
 
+    @action
     public getPeopleByName(name: string): People | undefined {
         return this.allPeoples.find(item => item.getName() === name);
     }
@@ -136,6 +138,7 @@ export class PeopleStorage {
         return this.allPeoples;
     }
 
+    @action
     public getNextPagePeoples(): People[] {
         this.page++;
         this.ApiService.getNextPeoplePage(this.page).then((data) => {
